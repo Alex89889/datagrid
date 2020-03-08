@@ -1,32 +1,9 @@
 import React, { Component} from "react";
 import style from './GridStyles.css';
-import Faker from 'faker';
-
 
 class Grid extends Component {
-  constructor(props) {
+  constructor(props){
     super(props)
-    this.state = {
-      users: [],
-    }
-  }
-  
-  componentWillMount() {
-    for (let i = 0; i < 1000; i++) {
-      const user = {
-        id: i,
-	    github: Faker.internet.userName(),
-		name: Faker.internet.userName(),
-		avatar: Faker.internet.avatar(),
-		email: Faker.internet.email(),
-		score: Faker.random.number(),
-		mentor: Faker.internet.userName(),
-		active: Faker.random.boolean(),
-      }
-      this.setState(prevState => ({
-        users: [...prevState.users, user],
-      }))
-    }
   }
   
   render() {
@@ -39,19 +16,31 @@ class Grid extends Component {
 			      <table className="table table-striped table-bordered table-condensed">
               <thead>
                 <tr>
-				  <th>avatar</th>
-                  <th>name</th>
-                  <th>github</th>
-				  <th>email</th>
-                  <th>score</th>
-                  <th>mentor</th>
-				  <th>active</th>
+				  <th onClick={this.props.onSort.bind(null, 'id')}>id</th>
+                  <th onClick={this.props.onSort.bind(null, 'name')}>
+				    name {this.props.sortField === 'name' ? <small>{this.props.sort}</small> : null}
+				  </th>
+                  <th onClick={this.props.onSort.bind(null, 'github')}>
+					github {this.props.sortField === 'github' ? <small>{this.props.sort}</small> : null}
+				  </th>
+				  <th onClick={this.props.onSort.bind(null, 'email')}>
+				    email {this.props.sortField === 'email' ? <small>{this.props.sort}</small> : null}
+				  </th>
+                  <th onClick={this.props.onSort.bind(null, 'score')}>
+				    score {this.props.sortField === 'score' ? <small>{this.props.sort}</small> : null}
+				  </th>
+                  <th onClick={this.props.onSort.bind(null, 'mentor')}>
+				    mentor {this.props.sortField === 'mentor' ? <small>{this.props.sort}</small> : null}
+				  </th>
+				  <th onClick={this.props.onSort.bind(null, 'active')}>
+					active {this.props.sortField === 'active' ? <small>{this.props.sort}</small> : null}
+				  </th>
                 </tr>
               </thead>
               <tbody>
-			      { this.state.users.map(item =>(
+			    { this.props.users.map(item =>(
 				  <tr key={item.id}>
-				    <td><img src={item.avatar} alt={item.name} width="50" height="50" /></td>
+				    <td>{item.id}</td>
 					<td>{item.name}</td>
                     <td>{item.github}</td>
                     <td>{item.email}</td>
@@ -59,7 +48,7 @@ class Grid extends Component {
 					<td>{item.mentor}</td>
 					<td>{String(item.active)}</td>
                   </tr>
-				        ))}
+				))}
               </tbody>
 			  </table>
 			</div>
