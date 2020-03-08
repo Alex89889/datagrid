@@ -8,12 +8,10 @@ class Grid extends Component {
   
   render() {
 	  return (
-	    
-	      <section className="worklog" css={style}>
-	        <div className="col-lg-12 sg-display">
-		        <h2 className="sg-h2">DataGrid React</h2>
+	    <section className="data" css={style}>
+	      <div className="col-lg-12 sg-display">
 		
-			      <table className="table table-striped table-bordered table-condensed">
+            <table className="table table-striped table-bordered table-condensed">
               <thead>
                 <tr>
 				  <th onClick={this.props.onSort.bind(null, 'id')}>id</th>
