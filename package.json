@@ -37,6 +37,7 @@
     ]
   },
   "devDependencies": {
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "react-window": "^1.8.5"
   }
 }

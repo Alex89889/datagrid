@@ -10,8 +10,8 @@ class App extends Component {
     super(props)
     this.state = {
       users: [],
-	  sort: 'asc',  // 'desc'
-	  sortField: 'id',
+      sortArray: [],
+      sortFieldArray: [],	  
 	  search: '',
     }
   }
@@ -21,7 +21,9 @@ class App extends Component {
       const user = {
         id: i,
 	    github: Faker.internet.userName(),
-		name: Faker.internet.userName(),
+		firstName: Faker.name.firstName(),
+		lastName: Faker.name.lastName(),
+		login: Faker.internet.userName(),
 		avatar: Faker.internet.avatar(),
 		email: Faker.internet.email(),
 		score: Faker.random.number(),
@@ -34,15 +36,39 @@ class App extends Component {
     }
   }
   
-  onSort = sortField => { 
+  onSort = sortField => event => { 
     const cloneData = this.state.users.concat();
-    const sortType = this.state.sort === 'asc' ? 'desc' : 'asc';
-    const orderedData = _.orderBy(cloneData, sortField, sortType);
-
+	const cloneSortField = this.state.sortFieldArray.concat();
+	const cloneSort = this.state.sortArray.concat();
+	let orderedData;
+	
+    if (event.shiftKey) {
+	  if(cloneSortField.indexOf(sortField) !== -1){
+		let indexSortField = cloneSortField.indexOf(sortField);
+		cloneSort[indexSortField] = this.state.sortArray[indexSortField] === 'asc' ? 'desc' : 'asc';
+	  }
+	  else{
+		cloneSortField.push(sortField);
+		cloneSort.push('asc');
+	  }
+	  orderedData = _.sortBy(cloneData, cloneSortField, cloneSort);
+    }
+	else{
+	  if(cloneSortField.indexOf(sortField) !== -1 || cloneSortField[0]===sortField){
+		cloneSort[0] = this.state.sortArray[0] === 'asc' ? 'desc' : 'asc';
+	  }
+	  else{
+		cloneSortField.length = 0;
+		cloneSort.length = 0;
+		cloneSortField.push(sortField);
+		cloneSort.push('asc'); 
+	  }
+      orderedData = _.orderBy(cloneData, cloneSortField, cloneSort); 	
+	}
     this.setState({
       users: orderedData,
-      sort: sortType,
-      sortField
+      sortFieldArray: cloneSortField,
+	  sortArray: cloneSort
     })
   }
   
@@ -89,8 +115,8 @@ class App extends Component {
 	    <Grid 
 		  users={filteredData}
 		  onSort={this.onSort} 
-		  sortField={this.state.sortField}
-		  sort={this.state.sort}
+		  sortArray={this.state.sortArray}
+		  sortFieldArray={this.state.sortFieldArray}	  
 		/>
       </div>
     );
