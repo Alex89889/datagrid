@@ -7,7 +7,7 @@ export default props => {
       }
 
     return (
-      <div className="col-lg-12 sg-display">
+      <div className="col-lg-12 sg-display" >
         <div className="input-group mb-3 mt-3">
           <div className="input-group-prepend">
             <button
@@ -24,12 +24,6 @@ export default props => {
             value={value}
           />
         </div>
-
-        <p className="text-center">
-          The search will show any matching values. If there is no match,
-          then all the data.
-        </p>
-        <p className="text-center">To sort, click on the title.</p>
       </div>
     );
 }

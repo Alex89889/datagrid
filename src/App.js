@@ -1,6 +1,7 @@
 import React, { Component} from "react";
 import Grid from './components/Grid/';
 import GridFilter from './components/GridFilter/';
+import GridFilterNum from './components/GridFilterNum/';
 import Faker from 'faker';
 import _ from 'lodash';
 
@@ -13,22 +14,29 @@ class App extends Component {
       sortArray: [],
       sortFieldArray: [],	  
 	  search: '',
+	  filterField: '',
+	  selectedEmails: [],
+	  role:['mentor', 'student'],
+	  statusSt: ['active', 'inactive']
     }
+	
   }
   
   componentWillMount() {
     for (let i = 0; i < 1000; i++) {
+	  let randomRole = this.state.role[(Math.floor(Math.random() * (this.state.role.length)))];
+	  let randomStatus = this.state.statusSt[(Math.floor(Math.random() * (this.state.statusSt.length)))];
+	  let newRole = `${randomRole}, ${randomStatus}`
       const user = {
         id: i,
-	    github: Faker.internet.userName(),
 		firstName: Faker.name.firstName(),
 		lastName: Faker.name.lastName(),
 		login: Faker.internet.userName(),
 		avatar: Faker.internet.avatar(),
 		email: Faker.internet.email(),
-		score: Faker.random.number(),
 		mentor: Faker.internet.userName(),
 		active: Faker.random.boolean(),
+		role: newRole
       }
       this.setState(prevState => ({
         users: [...prevState.users, user],
@@ -72,38 +80,56 @@ class App extends Component {
     })
   }
   
-  searchHandler = search => {
-    this.setState({search, currentPage: 0})
+  searchHandler = search => { 
+    this.setState({search});
   }
   
+  filterHandler = filterField => { 
+    this.setState({filterField});
+  }
+  
+  
+  
    getFilteredData(){
-    const {users, search} = this.state
 
-    if (!search) {
+    const {users, search, filterField} = this.state;
+
+    if (!filterField && !search) {
       return users
     }
-   var result = users.filter(item => {
-     return (
-       item["name"].toLowerCase().includes(search.toLowerCase()) ||
-       item["github"].toLowerCase().includes(search.toLowerCase()) ||
+	if(search){
+	var result = users.filter(item => {
+      return (
+       item["login"].toLowerCase().includes(search.toLowerCase()) ||
+	   item["lastName"].toLowerCase().includes(search.toLowerCase()) ||
+	   item["firstName"].toLowerCase().includes(search.toLowerCase()) ||
        item["email"].toLowerCase().includes(search.toLowerCase()) ||
-       item["score"].toLowerCase().includes(search.toLowerCase()) ||
-       item["mentor"].toLowerCase().includes(search.toLowerCase()) ||
-       item["active"].toLowerCase().includes(search.toLowerCase())
+       item["mentor"].toLowerCase().includes(search.toLowerCase())||
+       item["role"].toLowerCase().includes(search.toLowerCase())  
+       || item["active"].toString().toLowerCase().includes(search.toLowerCase())
      );
-   });
+    });
+	}
+	 
+	if(filterField){
+	  let filterFieldStr = filterField.join(' ');
+	  result = users.filter(item => {
+      return (
+       item["role"].toLowerCase().includes(filterFieldStr.toLowerCase())  
+     );
+    });	
+	}
    if(!result.length){
-     result = this.state.users
+     result = users
    }
     return result
   }
   
+  
+  
   render() {
 	const filteredData = this.getFilteredData();
-    // debugger
-  //  const pageCount = Math.ceil(filteredData.length / pageSize)
-  //  const displayData = _.chunk(filteredData, pageSize)[this.state.currentPage]
-	
+
 	return (
       <div className="App">
         <header className="App-header">
@@ -112,11 +138,14 @@ class App extends Component {
 		  </div>
         </header>
 		<GridFilter onSearch={this.searchHandler} />
+		<GridFilterNum onFilter={this.filterHandler} />
 	    <Grid 
 		  users={filteredData}
 		  onSort={this.onSort} 
 		  sortArray={this.state.sortArray}
-		  sortFieldArray={this.state.sortFieldArray}	  
+		  sortFieldArray={this.state.sortFieldArray}	
+          selectChange = {this.selectChange}	
+		  selectedEmails = {this.state.selectedEmails}
 		/>
       </div>
     );

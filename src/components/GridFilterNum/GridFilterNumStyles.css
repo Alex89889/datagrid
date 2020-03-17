@@ -1,0 +1,9 @@
+.multiselect{
+	width:90%;
+	display: inline-block;
+	box-sizing: border-box;
+}
+.btn-filter{
+	width:10%
+}
+

@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "lodash": "^4.17.15",
+    "react-widgets": "^4.5.0",
     "react-window": "^1.8.5"
   }
 }
