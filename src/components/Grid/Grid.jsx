@@ -16,9 +16,9 @@ class Grid extends Component {
       
 	  return (
 	    <section className="data" css={style}>
-		  <div className="col-lg-12 sg-display">
+		  <div className="col-table sg-display">
 		    
-            <table className="table table-striped table-bordered table-condensed">
+            <table className="table table-striped table-bordered table-condensed" >
               <thead>
                 <tr>
 				  <th onClick={this.props.onSort('id')} className="id">
@@ -50,7 +50,7 @@ class Grid extends Component {
               <tbody>
 			    { this.props.users.map(item =>(
 				  <tr key={item.id}>
-				    <td>{item.id}</td>
+				    <th>{item.id}</th>
 					<td>{item.firstName}</td>
 					<td>{item.lastName}</td>
 					<td>{item.login}</td>
